@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class OkGoogleActivity extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity {
     TextView text;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

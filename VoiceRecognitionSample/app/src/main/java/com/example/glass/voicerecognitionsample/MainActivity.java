@@ -65,6 +65,12 @@ public class MainActivity extends AppCompatActivity implements
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
           startActivity(intent);
         }
+        else if(results.equals("투"))
+        {
+          Intent intent = new Intent(getApplicationContext(),
+                  SecondActivity.class);
+          startActivity(intent);
+        }
         /*
         switch(results.toString()){
           case "one":
