@@ -16,39 +16,96 @@
 
 package com.example.glass.voicerecognitionsample;
 
+import android.Manifest;
+import android.app.SearchManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.example.glass.ui.GlassGestureDetector;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements
     GlassGestureDetector.OnGestureListener {
 
   private static final int REQUEST_CODE = 999;
+  private static final int FEATURE_VOICE_COMMANDS = 14;
   private static final String TAG = MainActivity.class.getSimpleName();
   private static final String DELIMITER = "\n";
+
   private TextView resultTextView;
   private GlassGestureDetector glassGestureDetector;
-
   private List<String> mVoiceResults = new ArrayList<>(4);
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    getWindow().requestFeature(FEATURE_VOICE_COMMANDS);
     setContentView(R.layout.activity_main);
     resultTextView = findViewById(R.id.results);
     glassGestureDetector = new GlassGestureDetector(this, this);
+
+    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 200);
   }
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    if (requestCode == 200) {
+      for (int result : grantResults) {
+        if (result != PackageManager.PERMISSION_GRANTED) {
+          Log.d(TAG, "Permission denied. Voice commands menu is disabled.");
+        }
+      }
+    } else {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+  }
+
+  @Override
+  public boolean onCreatePanelMenu(int featureId, @NonNull Menu menu) {
+    getMenuInflater().inflate(R.menu.menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onContextItemSelected(@NonNull MenuItem item) {
+    switch (item.getItemId()) {
+      // Handle selected menu item
+      case R.id.menu1:
+        // Handle menu1 action
+        break;
+      case R.id.menu2:
+        break;
+      case R.id.menu3:
+        break;
+      case R.id.menu4:
+        break;
+      case R.id.menu5:
+        break;
+
+      default:
+       return super.onContextItemSelected(item);
+    }
+    return true;
+  }
+
+
+
 
   @Override
   protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -57,36 +114,38 @@ public class MainActivity extends AppCompatActivity implements
     if (resultCode == RESULT_OK) {
       final List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
       Log.d(TAG, "results: " + results.toString());
-      //스트링비교
       if (results != null && results.size() > 0 && !results.get(0).isEmpty()) {
-
-        if(results.get(0).equals("원"))
+        if(results.get(0).equals("one"))
         {
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
           startActivity(intent);
         }
-        else if(results.equals("투"))
+        else if (results.get(0).equals("image"))
         {
-          Intent intent = new Intent(getApplicationContext(),
-                  SecondActivity.class);
+          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://media/internal/images/media"));
           startActivity(intent);
         }
-        /*
-        switch(results.toString()){
-          case "one":
-            Intent okgoogle = new Intent(MainActivity.this, OkGoogleActivity.class);
-            startActivity(okgoogle);
-            break;
-          case "start" :
-            break;
-          case "cancel" :
-            break;
-        }*/
+        else if (results.get(0).equals("Google"))
+        {
+          Uri uri = Uri.parse("https://www.google.com");
+          Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+          startActivity(intent);
+        }
+        else if (results.get(0).equals("battery"))
+        {
+          Intent intent = new Intent(Intent.ACTION_BATTERY_CHANGED);
+          startActivity(intent);
+        }
+        else if(results.get(0).equals("Hi"))
+        {
+          Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+          intent.putExtra(SearchManager.QUERY,"hci");
+          startActivity(intent);
+        }
 
         updateUI(results.get(0));
       }
-    }
-      else {
+    } else {
       Log.d(TAG, "Result not OK");
     }
   }
@@ -110,10 +169,12 @@ public class MainActivity extends AppCompatActivity implements
     }
   }
 
-  private void requestVoiceRecognition() {
+  private void requestVoiceRecognition()
+  {
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+    final String[] keywords = {"one", "image", "Google", "battery", "Hi"};
+    intent.putExtra("recognition-phrases", keywords);
+    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     startActivityForResult(intent, REQUEST_CODE);
   }
 
@@ -123,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements
     }
     mVoiceResults.add(0, result);
     final String recognizedText = String.join(DELIMITER, mVoiceResults);
-
     resultTextView.setText(recognizedText);
   }
 }
