@@ -20,6 +20,7 @@ import android.Manifest;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -31,6 +32,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,26 +78,40 @@ public class MainActivity extends AppCompatActivity implements
     }
   }
 
+  /*
   @Override
   public boolean onCreatePanelMenu(int featureId, @NonNull Menu menu) {
     getMenuInflater().inflate(R.menu.menu, menu);
     return true;
   }
 
+
   @Override
   public boolean onContextItemSelected(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       // Handle selected menu item
       case R.id.menu1:
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivity(intent);
         // Handle menu1 action
         break;
       case R.id.menu2:
+        Intent intent2 = new Intent(Intent.ACTION_VIEW, Uri.parse("content://media/internal/images/media"));
+        startActivity(intent2);
         break;
       case R.id.menu3:
+        Uri uri = Uri.parse("https://www.google.com");
+        Intent intent3 = new Intent(Intent.ACTION_VIEW,uri);
+        startActivity(intent3);
         break;
       case R.id.menu4:
+        Intent intent4 = new Intent(Intent.ACTION_BATTERY_CHANGED);
+        startActivity(intent4);
         break;
       case R.id.menu5:
+        Intent intent5 = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent5.putExtra(SearchManager.QUERY,"hci");
+        startActivity(intent5);
         break;
 
       default:
@@ -103,8 +119,7 @@ public class MainActivity extends AppCompatActivity implements
     }
     return true;
   }
-
-
+*/
 
 
   @Override
@@ -120,9 +135,9 @@ public class MainActivity extends AppCompatActivity implements
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
           startActivity(intent);
         }
-        else if (results.get(0).equals("image"))
+        else if (results.get(0).equals("video"))
         {
-          Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("content://media/internal/images/media"));
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
           startActivity(intent);
         }
         else if (results.get(0).equals("Google"))
