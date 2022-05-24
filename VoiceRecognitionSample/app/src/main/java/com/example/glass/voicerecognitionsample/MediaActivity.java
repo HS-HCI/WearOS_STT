@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 import com.example.glass.ui.GlassGestureDetector;
@@ -24,6 +25,22 @@ public class MediaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media);
 
+        final VideoView videoView = (VideoView)findViewById(R.id.videoView);
+
+        Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/cat");
+        videoView.setVideoURI(uri);
+
+        final MediaController mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+
+        videoView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mediaController.show(0);
+                videoView.start();
+            }
+        }, 100);
+/*
         SurfaceView surfaceView = findViewById(R.id.surfaceView);
         final ProgressBar progressBar = findViewById(R.id.progressBar);
 
@@ -62,6 +79,8 @@ public class MediaActivity extends AppCompatActivity {
         public void surfaceDestroyed(SurfaceHolder holder) {
 
         }
+
+ */
     }
 }
 
