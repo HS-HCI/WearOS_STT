@@ -135,15 +135,14 @@ public class MainActivity extends AppCompatActivity implements
           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
           startActivity(intent);
         }
-        else if (results.get(0).equals("video"))
+        else if (results.get(0).equals("back"))
         {
-          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
-          startActivity(intent);
+          Intent intent2 = new Intent(MainActivity.this, MediaActivity.class);
+          startActivity(intent2);
         }
-        else if (results.get(0).equals("Google"))
+        else if (results.get(0).equals("shoulder"))
         {
-          Uri uri = Uri.parse("https://www.google.com");
-          Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+          Intent intent = new Intent(MainActivity.this, MediaActivity2.class);
           startActivity(intent);
         }
         else if (results.get(0).equals("battery"))
@@ -153,8 +152,11 @@ public class MainActivity extends AppCompatActivity implements
         }
         else if(results.get(0).equals("Hi"))
         {
-          Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+          /*Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
           intent.putExtra(SearchManager.QUERY,"hci");
+          startActivity(intent);
+          */
+          Intent intent = new Intent(Intent.ACTION_BATTERY_CHANGED);
           startActivity(intent);
         }
 
@@ -186,8 +188,9 @@ public class MainActivity extends AppCompatActivity implements
 
   private void requestVoiceRecognition()
   {
+    final String[] keywords = {"shoulder", "back", "chest", "Abs", "lower body"};
+
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-    final String[] keywords = {"one", "image", "Google", "battery", "Hi"};
     intent.putExtra("recognition-phrases", keywords);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     startActivityForResult(intent, REQUEST_CODE);
