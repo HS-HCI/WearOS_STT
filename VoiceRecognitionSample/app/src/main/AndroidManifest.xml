@@ -13,8 +13,11 @@
             android:name=".MediaActivity"
             android:exported="false" />
         <activity
-            android:name=".MediaActivity2"
-            android:exported="false" />
+            android:name=".TimerActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".VoiceMemoActivity"
+            android:exported="false"/>
         <!--
       Changes Glass touchpad response from the following key strokes:
         - Enter

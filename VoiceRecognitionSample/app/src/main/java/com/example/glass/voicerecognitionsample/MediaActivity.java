@@ -26,11 +26,16 @@ public class MediaActivity extends AppCompatActivity implements
     private SurfaceHolder holder;
     private GlassGestureDetector glassGestureDetector;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media);
+        Intent intent = getIntent();
+
+        String part = intent.getStringExtra("part");
+        //System.out.println(back);
+
+
         glassGestureDetector = new GlassGestureDetector(this, this);
 
         SurfaceView surfaceView = findViewById(R.id.surfaceView);
@@ -38,22 +43,121 @@ public class MediaActivity extends AppCompatActivity implements
 
         mediaPlayer = new MediaPlayer();
 
-        try{
-            Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/back");
-            mediaPlayer.setDataSource(this, uri);
-            holder=surfaceView.getHolder();
-            holder.addCallback(new MyCallBack());
-            mediaPlayer.prepare();
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    progressBar.setVisibility(View.INVISIBLE);
-                    mediaPlayer.start();
-                    mediaPlayer.setLooping(true);
-                }
-            });
+        // shoulder
+        if (part.equals("shoulder") == true)
+        {
+            try{
+                Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/shoulder");
+                mediaPlayer.setDataSource(this, uri);
+                holder=surfaceView.getHolder();
+                holder.addCallback(new MyCallBack());
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mediaPlayer.start();
+                        mediaPlayer.setLooping(true);
+
+                    }
+                });
+            }
+
+
+            catch (IOException e) {}
         }
-        catch (IOException e) {}
+        // back
+        if (part.equals("back") == true)
+        {
+            try{
+                Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/back");
+                mediaPlayer.setDataSource(this, uri);
+                holder=surfaceView.getHolder();
+                holder.addCallback(new MyCallBack());
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mediaPlayer.start();
+                        mediaPlayer.setLooping(true);
+
+                    }
+                });
+            }
+
+
+            catch (IOException e) {}
+        }
+        // chest
+        if (part.equals("chest") == true)
+        {
+            try{
+                Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/chest");
+                mediaPlayer.setDataSource(this, uri);
+                holder=surfaceView.getHolder();
+                holder.addCallback(new MyCallBack());
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mediaPlayer.start();
+                        mediaPlayer.setLooping(true);
+
+                    }
+                });
+            }
+
+
+            catch (IOException e) {}
+        }
+        // abs
+        if (part.equals("abs") == true)
+        {
+            try{
+                Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/abs");
+                mediaPlayer.setDataSource(this, uri);
+                holder=surfaceView.getHolder();
+                holder.addCallback(new MyCallBack());
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mediaPlayer.start();
+                        mediaPlayer.setLooping(true);
+
+                    }
+                });
+            }
+
+
+            catch (IOException e) {}
+        }
+        // lower body
+        if (part.equals("lower body") == true)
+        {
+            try{
+                Uri uri = Uri.parse("android.resource://" + getPackageName() + "/raw/lower_body");
+                mediaPlayer.setDataSource(this, uri);
+                holder=surfaceView.getHolder();
+                holder.addCallback(new MyCallBack());
+                mediaPlayer.prepare();
+                mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        progressBar.setVisibility(View.INVISIBLE);
+                        mediaPlayer.start();
+                        mediaPlayer.setLooping(true);
+
+                    }
+                });
+            }
+
+
+            catch (IOException e) {}
+        }
 
     }
     @Override
@@ -65,10 +169,16 @@ public class MediaActivity extends AppCompatActivity implements
     public boolean onGesture(GlassGestureDetector.Gesture gesture) {
         switch (gesture) {
             case TAP:
-                requestVoiceRecognition();
+                mediaPlayer.start();
                 return true;
             case SWIPE_DOWN:
                 finish();
+                return true;
+            case SWIPE_BACKWARD:
+                mediaPlayer.pause();
+                return true;
+            case TWO_FINGER_TAP:
+                Timer();
                 return true;
             default:
                 return false;
@@ -77,11 +187,18 @@ public class MediaActivity extends AppCompatActivity implements
 
     private void requestVoiceRecognition()
     {
+        final String[] keywords = {"shoulder", "back", "chest", "abs", "lower body"};
+
         final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        final String[] keywords = {"leg", "shoulder", "Google", "battery", "Hi"};
         intent.putExtra("recognition-phrases", keywords);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    private void Timer()
+    {
+        Intent intent = new Intent(MediaActivity.this,TimerActivity.class);
+        startActivity(intent);
     }
 
     private class MyCallBack implements SurfaceHolder.Callback {

@@ -130,33 +130,34 @@ public class MainActivity extends AppCompatActivity implements
       final List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
       Log.d(TAG, "results: " + results.toString());
       if (results != null && results.size() > 0 && !results.get(0).isEmpty()) {
-        if(results.get(0).equals("one"))
+        if(results.get(0).equals("shoulder"))
         {
-          Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+          intent.putExtra("part", "shoulder");
           startActivity(intent);
         }
         else if (results.get(0).equals("back"))
         {
-          Intent intent2 = new Intent(MainActivity.this, MediaActivity.class);
-          startActivity(intent2);
-        }
-        else if (results.get(0).equals("shoulder"))
-        {
-          Intent intent = new Intent(MainActivity.this, MediaActivity2.class);
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+          intent.putExtra("part", "back");
           startActivity(intent);
         }
-        else if (results.get(0).equals("battery"))
+        else if (results.get(0).equals("chest"))
         {
-          Intent intent = new Intent(Intent.ACTION_BATTERY_CHANGED);
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+          intent.putExtra("part", "chest");
           startActivity(intent);
         }
-        else if(results.get(0).equals("Hi"))
+        else if (results.get(0).equals("abs"))
         {
-          /*Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-          intent.putExtra(SearchManager.QUERY,"hci");
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+          intent.putExtra("part", "abs");
           startActivity(intent);
-          */
-          Intent intent = new Intent(Intent.ACTION_BATTERY_CHANGED);
+        }
+        else if(results.get(0).equals("lower body"))
+        {
+          Intent intent = new Intent(MainActivity.this, MediaActivity.class);
+          intent.putExtra("part", "lower body");
           startActivity(intent);
         }
 
@@ -177,10 +178,15 @@ public class MainActivity extends AppCompatActivity implements
     switch (gesture) {
       case TAP:
         requestVoiceRecognition();
+        if (gesture == GlassGestureDetector.Gesture.SWIPE_FORWARD)
+        {
+          VoiceMemo();
+        }
         return true;
       case SWIPE_DOWN:
         finish();
         return true;
+      //case SWIPE_FORWARD:
       default:
         return false;
     }
@@ -188,12 +194,18 @@ public class MainActivity extends AppCompatActivity implements
 
   private void requestVoiceRecognition()
   {
-    final String[] keywords = {"shoulder", "back", "chest", "Abs", "lower body"};
+    final String[] keywords = {"shoulder", "back", "chest", "abs", "lower body"};
 
     final Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
     intent.putExtra("recognition-phrases", keywords);
     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
     startActivityForResult(intent, REQUEST_CODE);
+  }
+
+  private void VoiceMemo()
+  {
+    Intent intent = new Intent(MainActivity.this, VoiceMemoActivity.class);
+    startActivity(intent);
   }
 
   private void updateUI(String result) {
@@ -205,3 +217,4 @@ public class MainActivity extends AppCompatActivity implements
     resultTextView.setText(recognizedText);
   }
 }
+
