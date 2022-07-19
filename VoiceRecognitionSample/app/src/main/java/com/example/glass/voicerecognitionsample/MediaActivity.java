@@ -177,7 +177,7 @@ public class MediaActivity extends AppCompatActivity implements
             case SWIPE_BACKWARD:
                 mediaPlayer.pause();
                 return true;
-            case TWO_FINGER_TAP:
+            case SWIPE_UP:
                 Timer();
                 return true;
             default:

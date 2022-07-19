@@ -186,8 +186,8 @@ public class MainActivity extends AppCompatActivity implements
       case SWIPE_DOWN:
         finish();
         return true;
-      //case SWIPE_FORWARD:
-      default:
+//      case SWIPE_FORWARD:
+        default:
         return false;
     }
   }

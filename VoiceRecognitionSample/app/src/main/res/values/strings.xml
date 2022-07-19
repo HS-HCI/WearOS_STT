@@ -12,7 +12,7 @@
 -->
 <resources>
     <string name="app_name">Workout routine app Sample</string>
-    <string name="voice_instruction">Tap to start voice recognition</string>
+    <string name="voice_instruction">Tap to start Workout</string>
     <string name="voice_instruction2">Tap to set timer</string>
     <string name="voice_instruction3">Say whatever you want to record</string>
 </resources>
