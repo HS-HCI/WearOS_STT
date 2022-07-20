@@ -22,9 +22,10 @@ limitations under the License.
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="150dp"
-        android:layout_marginBottom="400dp"
-        android:src="@drawable/timer_icon"/>
+        android:alpha="0.2"
+        android:layout_marginRight="50dp"
+        android:contentDescription="Background image"
+        android:src="@drawable/stopwatch" />
 
     <TextView
         android:id="@+id/instruction"
@@ -41,8 +42,10 @@ limitations under the License.
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="00:00"
-        android:textSize="50dp" />
+        style="@style/HeaderText"
+        android:text="@string/voice_instruction2"
+        android:textSize="40dp" />
+
 
 
 </RelativeLayout>
