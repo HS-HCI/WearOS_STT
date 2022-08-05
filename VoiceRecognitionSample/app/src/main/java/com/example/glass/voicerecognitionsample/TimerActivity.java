@@ -126,7 +126,7 @@ public class TimerActivity extends AppCompatActivity
 
         conversionTime = Long.valueOf(getHour) * 1000 * 3600 + Long.valueOf(getMin) * 60 * 1000 + Long.valueOf(getSecond) * 1000;
 
-        new CountDownTimer(conversionTime, 1000)
+        CountDownTimer countDownTimer = new CountDownTimer(conversionTime, 1000)
         {
             public void onTick(long millisUntilFinished)
             {
@@ -229,6 +229,7 @@ public class TimerActivity extends AppCompatActivity
                 finish();
                 return true;
             case SWIPE_BACKWARD:
+            //멈추는 부분 작동 X
                 countDownTimer.cancel();
             default:
                 return true;

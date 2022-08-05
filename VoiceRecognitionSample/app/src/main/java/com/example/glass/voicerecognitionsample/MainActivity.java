@@ -178,14 +178,12 @@ public class MainActivity extends AppCompatActivity implements
     switch (gesture) {
       case TAP:
         requestVoiceRecognition();
-        if (gesture == GlassGestureDetector.Gesture.SWIPE_FORWARD)
-        {
-          VoiceMemo();
-        }
         return true;
       case SWIPE_DOWN:
         finish();
         return true;
+      case SWIPE_UP:
+        VoiceMemo();
 //      case SWIPE_FORWARD:
         default:
         return false;
